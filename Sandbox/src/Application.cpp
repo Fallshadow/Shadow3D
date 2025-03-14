@@ -3,7 +3,7 @@
 class Sandbox : public Hazel::Application {
     public:
         Sandbox() {
-
+            HZ_TRACE("Hello!");
         }
 };
 

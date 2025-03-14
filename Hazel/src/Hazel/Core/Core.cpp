@@ -1,4 +1,5 @@
 #include "Core.h"
+#include "Log.h"
 
 #include <Windows.h>
 
@@ -8,12 +9,15 @@ namespace Hazel {
 
     void InitializeCore()
     {
+        hz::Log::Init();
 
+        HZ_CORE_TRACE("Hazel Engine {}", HAZEL_BUILD_ID);
+        HZ_CORE_TRACE("Initializing...");
     }
 
     void ShutdownCore()
     {
-
+        HZ_CORE_TRACE("Shutting down...");
     }
 
 }
