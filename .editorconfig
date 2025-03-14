@@ -1,0 +1,5 @@
+# 表示这是项目的根 .editorconfig 文件。如果有多个 .editorconfig 文件，设置 root = true 会阻止父目录中的 .editorconfig 文件影响当前项目。
+root = true
+
+[*.{h,cpp,cs,lua}]  
+charset = utf-8  
