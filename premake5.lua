@@ -63,7 +63,7 @@ project "Hazel"
 		defines
 		{
 			"HZ_PLATFORM_WINDOWS",
-			"HZ_BUILD_DLL"
+			"HAZEL_BUILD_DLL"
 		}
 
 	filter "configurations:Debug"
