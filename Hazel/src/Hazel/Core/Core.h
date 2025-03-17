@@ -12,7 +12,7 @@ namespace Hazel {
 #endif
 
 #ifdef HZ_PLATFORM_WINDOWS
-	#ifdef HAZEL_BUILD_DLL
+	#ifdef HZ_BUILD_DLL
 		#define HAZEL_API __declspec(dllexport)
 	#else 
 		#define HAZEL_API __declspec(dllimport)
