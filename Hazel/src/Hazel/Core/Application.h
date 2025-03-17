@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Hazel/Core/Core.h"
+#include "Hazel/Core/Window.h"
 
 namespace Hazel {
 
@@ -16,7 +17,7 @@ namespace Hazel {
 			virtual void OnUpdate() { }
 
 		private:
-
+			std::unique_ptr<Window> m_Window;
 	};
 
 	// 交给客户端实现

@@ -9,7 +9,7 @@ namespace Hazel {
 
     void InitializeCore()
     {
-        hz::Log::Init();
+        Hazel::Log::Init();
 
         HZ_CORE_TRACE("Hazel Engine {}", HAZEL_BUILD_ID);
         HZ_CORE_TRACE("Initializing...");
