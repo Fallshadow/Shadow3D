@@ -10,6 +10,11 @@ namespace Hazel {
 			virtual ~Application();
 
 			void Run();
+
+			virtual void OnInit() { }
+			virtual void OnShutdown() { }
+			virtual void OnUpdate() { }
+
 		private:
 
 	};

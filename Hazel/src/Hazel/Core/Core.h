@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 namespace Hazel {
 	void InitializeCore();
 	void ShutdownCore();

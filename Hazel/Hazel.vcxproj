@@ -140,8 +140,14 @@
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Core\Application.h" />
     <ClInclude Include="src\Hazel\Core\Core.h" />
+    <ClInclude Include="src\Hazel\Core\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\Hazel\Core\Events\Event.h" />
+    <ClInclude Include="src\Hazel\Core\Events\KeyEvent.h" />
+    <ClInclude Include="src\Hazel\Core\Events\MouseEvent.h" />
     <ClInclude Include="src\Hazel\Core\Log.h" />
+    <ClInclude Include="src\Hazel\Core\Window.h" />
     <ClInclude Include="src\Hazel\EntryPoint.h" />
+    <ClInclude Include="src\Hazel\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="vendor\spdlog\async_logger.h" />
     <ClInclude Include="vendor\spdlog\common.h" />
     <ClInclude Include="vendor\spdlog\contrib\sinks\step_file_sink.h" />
@@ -185,6 +191,8 @@
     <ClCompile Include="src\Hazel\Core\Application.cpp" />
     <ClCompile Include="src\Hazel\Core\Core.cpp" />
     <ClCompile Include="src\Hazel\Core\Log.cpp" />
+    <ClCompile Include="src\Hazel\Core\Window.cpp" />
+    <ClCompile Include="src\Hazel\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
