@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;HZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -91,19 +91,24 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Hazel\Hazel.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST ..\bin\Debug-windows-x86_64\Sandbox (mkdir ..\bin\Debug-windows-x86_64\Sandbox)
+IF EXIST ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Hazel\Hazel.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;HZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MT %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -113,13 +118,17 @@
       <OptimizeReferences>true</OptimizeReferences>
       <ImportLibrary>..\bin\Release-windows-x86_64\Hazel\Hazel.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST ..\bin\Release-windows-x86_64\Sandbox (mkdir ..\bin\Release-windows-x86_64\Sandbox)
+IF EXIST ..\bin\Release-windows-x86_64\Hazel\Hazel.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Hazel\Hazel.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Hazel\Hazel.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_BUILD_DLL;HZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -135,6 +144,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <ImportLibrary>..\bin\Dist-windows-x86_64\Hazel\Hazel.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST ..\bin\Dist-windows-x86_64\Sandbox (mkdir ..\bin\Dist-windows-x86_64\Sandbox)
+IF EXIST ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-x86_64\Hazel\Hazel.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Hazel.h" />
@@ -148,44 +161,6 @@
     <ClInclude Include="src\Hazel\Core\Window.h" />
     <ClInclude Include="src\Hazel\EntryPoint.h" />
     <ClInclude Include="src\Hazel\Platform\Windows\WindowsWindow.h" />
-    <ClInclude Include="vendor\spdlog\async_logger.h" />
-    <ClInclude Include="vendor\spdlog\common.h" />
-    <ClInclude Include="vendor\spdlog\contrib\sinks\step_file_sink.h" />
-    <ClInclude Include="vendor\spdlog\details\async_log_helper.h" />
-    <ClInclude Include="vendor\spdlog\details\async_logger_impl.h" />
-    <ClInclude Include="vendor\spdlog\details\file_helper.h" />
-    <ClInclude Include="vendor\spdlog\details\log_msg.h" />
-    <ClInclude Include="vendor\spdlog\details\logger_impl.h" />
-    <ClInclude Include="vendor\spdlog\details\mpmc_blocking_q.h" />
-    <ClInclude Include="vendor\spdlog\details\null_mutex.h" />
-    <ClInclude Include="vendor\spdlog\details\os.h" />
-    <ClInclude Include="vendor\spdlog\details\pattern_formatter_impl.h" />
-    <ClInclude Include="vendor\spdlog\details\registry.h" />
-    <ClInclude Include="vendor\spdlog\details\spdlog_impl.h" />
-    <ClInclude Include="vendor\spdlog\fmt\bundled\format.h" />
-    <ClInclude Include="vendor\spdlog\fmt\bundled\ostream.h" />
-    <ClInclude Include="vendor\spdlog\fmt\bundled\posix.h" />
-    <ClInclude Include="vendor\spdlog\fmt\bundled\printf.h" />
-    <ClInclude Include="vendor\spdlog\fmt\bundled\time.h" />
-    <ClInclude Include="vendor\spdlog\fmt\fmt.h" />
-    <ClInclude Include="vendor\spdlog\fmt\ostr.h" />
-    <ClInclude Include="vendor\spdlog\formatter.h" />
-    <ClInclude Include="vendor\spdlog\logger.h" />
-    <ClInclude Include="vendor\spdlog\sinks\android_sink.h" />
-    <ClInclude Include="vendor\spdlog\sinks\ansicolor_sink.h" />
-    <ClInclude Include="vendor\spdlog\sinks\base_sink.h" />
-    <ClInclude Include="vendor\spdlog\sinks\dist_sink.h" />
-    <ClInclude Include="vendor\spdlog\sinks\file_sinks.h" />
-    <ClInclude Include="vendor\spdlog\sinks\msvc_sink.h" />
-    <ClInclude Include="vendor\spdlog\sinks\null_sink.h" />
-    <ClInclude Include="vendor\spdlog\sinks\ostream_sink.h" />
-    <ClInclude Include="vendor\spdlog\sinks\sink.h" />
-    <ClInclude Include="vendor\spdlog\sinks\stdout_sinks.h" />
-    <ClInclude Include="vendor\spdlog\sinks\syslog_sink.h" />
-    <ClInclude Include="vendor\spdlog\sinks\wincolor_sink.h" />
-    <ClInclude Include="vendor\spdlog\sinks\windebug_sink.h" />
-    <ClInclude Include="vendor\spdlog\spdlog.h" />
-    <ClInclude Include="vendor\spdlog\tweakme.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp" />
@@ -193,6 +168,11 @@
     <ClCompile Include="src\Hazel\Core\Log.cpp" />
     <ClCompile Include="src\Hazel\Core\Window.cpp" />
     <ClCompile Include="src\Hazel\Platform\Windows\WindowsWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">
+      <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

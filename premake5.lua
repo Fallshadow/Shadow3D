@@ -14,7 +14,13 @@ workspace "Hazel"
 	}
 -- 输出目录变量：生成配置（Debug 还是 Release 还是 Dist，即上面的 configurations） - 系统（这里就是 windows） - 系统架构（就是上面的 architecture）
 -- 当然这只是一个自定义的输出目录的命名，这里给出的算是很全面了，其实主要还是区分是那个配置输出的，即，根据 configurations 的不同，会生成在不同的文件夹中
-local outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+-- 包含相对于根文件夹的目录（解决方案目录）
+IncludeDir = {}
+IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
+
+include "Hazel/vendor/GLFW"
 
 -- 项目名称
 project "Hazel"
@@ -37,10 +43,10 @@ project "Hazel"
     -- 这个就是vs的包含和排除文件
 	files
 	{
-		"%{prj.name}/**.h",
-		"%{prj.name}/**.c",
-        "%{prj.name}/**.hpp", 
-		"%{prj.name}/**.cpp" 
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.c",
+        "%{prj.name}/src/**.hpp", 
+		"%{prj.name}/src/**.cpp" 
 	}
 
     -- 指定附加包含目录
@@ -48,8 +54,14 @@ project "Hazel"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor",
+		"%{IncludeDir.GLFW}",
 	}
     
+	links 
+	{ 
+		"GLFW"
+	}
+
     -- 系统配置项
 	filter "system:windows"
         -- c++语言版本
@@ -65,6 +77,15 @@ project "Hazel"
 			"HZ_PLATFORM_WINDOWS",
 			"HZ_BUILD_DLL"
 		}
+
+		-- 后处理
+		postbuildcommands
+        {
+			-- 创建目标目录 
+			("{MKDIR} ../bin/" .. outputdir .. "/Sandbox"),  
+			-- 复制文件到目标目录
+            ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+        }
 
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
@@ -82,27 +103,32 @@ project "Hazel"
 		defines "HZ_DIST"
 		runtime "Release"
 		optimize "On"
+	
+	filter { "system:windows", "configurations:Release" }
+        buildoptions "/MT"
 
 project "Sandbox"
 	location "Sandbox"
     -- 可执行文件
 	kind "ConsoleApp"
 	language "C++"
+	systemversion "10.0.17134.0"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    dependson 
-	{ 
+    -- 依赖项链接
+	links
+	{
 		"Hazel"
-    }
+	}
 
 	files
 	{
-		"%{prj.name}/**.h",
-		"%{prj.name}/**.c",
-        "%{prj.name}/**.hpp", 
-		"%{prj.name}/**.cpp" 
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.c",
+        "%{prj.name}/src/**.hpp", 
+		"%{prj.name}/src/**.cpp" 
 	}
 
 	includedirs
@@ -112,11 +138,6 @@ project "Sandbox"
         "Hazel/vendor",
 	}
 
-    -- 依赖项链接
-	links
-	{
-		"Hazel"
-	}
 
 	filter "system:windows"
 		cppdialect "C++17"
@@ -128,10 +149,12 @@ project "Sandbox"
 			"HZ_PLATFORM_WINDOWS",
 		}
 
-        postbuildcommands
-        {
-            ("{COPY} ../bin/" .. outputdir .. "/Hazel/Hazel.dll %{cfg.targetdir}")
-        }
+		-- 将 hazel 生成的 dll 移动到 sandbox 下
+		-- 因为已经 link 了，所以不需要再手动声明复制
+        -- postbuildcommands
+        -- {
+        --     ("{COPY} ../bin/" .. outputdir .. "/Hazel/Hazel.dll %{cfg.targetdir}")
+        -- }
 
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
