@@ -1,5 +1,7 @@
 #include "WindowsWindow.h"
+
 #include "Hazel/Core/Log.h"
+#include "Hazel/Core/Events/ApplicationEvent.h"
 
 namespace Hazel {
 
@@ -46,8 +48,18 @@ namespace Hazel {
             auto& data = *((WindowData*)glfwGetWindowUserPointer(window));
             data.Width = width;
             data.Height = height;
-            // TODO: Create and dispatch event
-            });
+            
+            WindowResizeEvent event((unsigned int)width, (unsigned int)height);
+            data.EventCallback(event);
+        });
+
+        // 窗口关闭的回调
+        glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
+            auto& data = *((WindowData*)glfwGetWindowUserPointer(window));
+
+            WindowCloseEvent event;
+            data.EventCallback(event);
+        });
     }
 
     void WindowsWindow::Shutdown() {
@@ -55,7 +67,7 @@ namespace Hazel {
     }
 
     void WindowsWindow::OnUpdate() {
-        HZ_CORE_INFO("Window size = {0}, {1}", GetWidth(), GetHeight());
+        // HZ_CORE_INFO("Window size = {0}, {1}", GetWidth(), GetHeight());
         glfwPollEvents();
         glfwSwapBuffers(m_Window);
     }

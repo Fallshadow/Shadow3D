@@ -6,9 +6,10 @@
 
 namespace Hazel {
 	// 事件类型 此事件类型名称切勿随意更改，因子类是通过宏定义传输字符达成的 override，更改时请仔细查找对应字符
+	// 目前事件是阻塞的，意味着一个事件发生时立即被分派，必须立即处理，将来更好的策略是在缓冲事件池中保存，然后再更新阶段的事件部分处理。
 	enum class EventType {
 		None = 0,
-		WindowClosed, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
+		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved
