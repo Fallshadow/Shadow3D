@@ -26,10 +26,12 @@ namespace Hazel {
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+
+		// 输出事件
+		HZ_CORE_TRACE("{}", event);
 	}
 
 	bool Application::OnWindowResize(WindowResizeEvent& e) {
-		HZ_CORE_INFO("Window Resize: {0}, {1}", e.GetWidth(), e.GetHeight());
 		return false;
 	}
 
