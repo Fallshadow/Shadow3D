@@ -2,6 +2,8 @@
 
 #include "Hazel/Core/Log.h"
 #include "Hazel/Core/Events/ApplicationEvent.h"
+#include "Hazel/Core/Events/KeyEvent.h"
+#include "Hazel/Core/Events/MouseEvent.h"
 
 namespace Hazel {
 
@@ -31,7 +33,7 @@ namespace Hazel {
         if (!s_GLFWInitialized) {
             // TODO: glfwTerminate on system shutdown
             int success = glfwInit();
-            HZ_ASSERT(success, "Could not intialize GLFW!");
+            HZ_CORE_ASSERT(success, "Could not intialize GLFW!");
             glfwSetErrorCallback(GLFWErrorCallback);
 
             s_GLFWInitialized = true;
@@ -46,11 +48,11 @@ namespace Hazel {
         // 设置窗口大小变化的回调函数
         glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
             auto& data = *((WindowData*)glfwGetWindowUserPointer(window));
-            data.Width = width;
-            data.Height = height;
-            
+
             WindowResizeEvent event((unsigned int)width, (unsigned int)height);
             data.EventCallback(event);
+            data.Width = width;
+            data.Height = height;
         });
 
         // 窗口关闭的回调
@@ -60,6 +62,65 @@ namespace Hazel {
             WindowCloseEvent event;
             data.EventCallback(event);
         });
+
+        // 窗口按键按下释放按住的事件回调
+        glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+            auto& data = *((WindowData*)glfwGetWindowUserPointer(window));
+
+            switch (action) {
+                case GLFW_PRESS:
+                {
+                    KeyPressedEvent event(key, 0);
+                    data.EventCallback(event);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    KeyReleasedEvent event(key);
+                    data.EventCallback(event);
+                    break;
+                }
+                case GLFW_REPEAT:
+                {
+                    KeyPressedEvent event(key, 1);
+                    data.EventCallback(event);
+                    break;
+                }
+            }
+            });
+
+        glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
+            auto& data = *((WindowData*)glfwGetWindowUserPointer(window));
+
+            switch (action) {
+                case GLFW_PRESS:
+                {
+                    MouseButtonPressedEvent event(button);
+                    data.EventCallback(event);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    MouseButtonReleasedEvent event(button);
+                    data.EventCallback(event);
+                    break;
+                }
+            }
+            });
+
+        glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
+            auto& data = *((WindowData*)glfwGetWindowUserPointer(window));
+
+            MouseScrolledEvent event((float)xOffset, (float)yOffset);
+            data.EventCallback(event);
+            });
+
+        glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x, double y) {
+            auto& data = *((WindowData*)glfwGetWindowUserPointer(window));
+
+            MouseMovedEvent event((float)x, (float)y);
+            data.EventCallback(event);
+            });
     }
 
     void WindowsWindow::Shutdown() {
